@@ -1,0 +1,25 @@
+{
+  "name": "gcf",
+  "version": "0.0.01",
+  "description": "GCF",
+  "main": "index.js",
+  "author": "infinityAlive <sonicx7boyboyboy@gmail.com>",
+  "scripts": {
+    "functions-start": "functions-framework --target=updatingWeather"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dayjs": "^1.8.14",
+    "dotenv": "^8.0.0",
+    "mongodb": "^3.2.7",
+    "qs": "^6.7.0",
+    "superagent": "^5.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "babel-preset-env": "^1.7.0",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-clean": "^0.4.0"
+  }
+}
