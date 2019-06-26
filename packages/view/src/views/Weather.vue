@@ -78,12 +78,6 @@
             vueModel.citiesWeatherInfo = citiesWeatherInfo
           })
         )
-
-      // areasWeatherInfoResponse = await vueModel.$axios({
-      //   method: 'get',
-      //   url: `http://localhost:8080/api/weather/areas`
-      // })
-      // vueModel.areasWeatherInfo = areasWeatherInfoResponse.data
     },
 
     methods: {
