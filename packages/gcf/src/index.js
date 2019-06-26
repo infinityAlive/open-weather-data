@@ -34,16 +34,17 @@ const retrieveCityWeather = async () => {
           const cityWeatherInfo = {}
           cityWeatherInfo['_id'] = city
           cityWeatherInfo['updateTime'] = new Date(dayjs().toISOString())
+          cityWeatherInfo['timeRange'] = []
           for (let i = 0; i < wx.length; i++) {
             const wxInfo = wx[i]
-            cityWeatherInfo[`time${i + 1}`] = {
+            cityWeatherInfo.timeRange.push({
               startTime: wxInfo.startTime,
               endTime: wxInfo.endTime,
               desc: wxInfo.parameter.parameterName,
               rainProbability: pop[i].parameter.parameterName,
               minTemperature: minT[i].parameter.parameterName,
               maxTemperature: maxT[i].parameter.parameterName,
-            }
+            })
           }
           multiCityWeather.push(cityWeatherInfo)
         }
@@ -88,6 +89,8 @@ const retrieveAreaWeather = async () => {
 
           areaWeatherInfo['_id'] = area
           areaWeatherInfo['updateTime'] = new Date(dayjs().toISOString())
+          areaWeatherInfo['city'] = locationInfo.parameter[0].parameterValue
+
           for (let weatherElementInfo of weatherElement) {
             areaWeatherInfo[weatherElementInfo.elementName] = weatherElementInfo.elementValue
           }
