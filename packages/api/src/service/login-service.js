@@ -12,7 +12,7 @@ loginService.retrieve = async (account, password) => {
       })
 
     if (loginInfo) {
-      const decryptedPwd = xorCrypt(loginInfo.password, config.key)
+      const decryptedPwd = xorCrypt(loginInfo.password, config.secret)
       if (decryptedPwd === password) {
         return LoginInfo.LOGIN_SUCCESS
       } else {

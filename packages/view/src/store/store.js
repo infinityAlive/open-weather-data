@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import loginUser from './modules/login-user'
+import accountInfo from './modules/account-info'
 
 Vue.use(Vuex)
 const store = new Vuex.Store({
   modules: {
-    loginUser
+    accountInfo
   }
 })
 

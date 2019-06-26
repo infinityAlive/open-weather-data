@@ -8,8 +8,8 @@ const router = express.Router()
 router.post('/login', loginApi.login)
 router.post('/logout', loginApi.logout)
 router.post('/register', loginApi.register)
-router.post('/checkSession', loginApi.checkSession)
+router.post('/checkToken', loginApi.checkToken)
 router.get('/weather/cities', weatherApi.retrieveCitiesWeatherInfo)
-router.get('/weather/areas', weatherApi.retrieveCitiesWeatherInfo)
+router.get('/weather/areas', weatherApi.retrieveAreasWeatherInfo)
 
 export default router

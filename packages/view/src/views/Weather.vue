@@ -1,14 +1,14 @@
 <template>
   <section>
     <mu-appbar style="width: 100%;" color="primary">
-      北北桃天氣資訊
+      {{ account}} 您好，目前北北桃天氣資訊如下：
       <mu-button flat slot="right">登出</mu-button>
     </mu-appbar>
     <article>
       <mu-container>
         <mu-flex justify-content="center">
           <mu-card style="max-width: 330px; margin: 20px 10px;"
-                   v-for="cityWeatherInfo of citiesWeatherInfo" key="cityWeatherInfo.city">
+                   v-for="cityWeatherInfo in citiesWeatherInfo" :key="cityWeatherInfo.city">
             <mu-card-header :title="`${cityWeatherInfo.startTime}~${cityWeatherInfo.endTime}`">
             </mu-card-header>
             <mu-card-media :title="cityWeatherInfo.city"
@@ -18,16 +18,21 @@
             <mu-card-title :title="`溫度 ${cityWeatherInfo.minTemperature} ~ ${cityWeatherInfo.maxTemperature}`"
                            :sub-title="`降雨機率 ${cityWeatherInfo.rainProbability}`"></mu-card-title>
             <mu-card-text>
-<!--              <mu-list>-->
-<!--                各地區-->
-<!--                <mu-list-item button :ripple="false">-->
-<!--                  <mu-list-item-action>-->
-<!--                    地區-->
-<!--                  </mu-list-item-action>-->
-<!--                  <mu-list-item-title>溫度 30 度 C</mu-list-item-title>-->
-<!--                  <mu-list-item-title>濕度 30 %</mu-list-item-title>-->
-<!--                </mu-list-item>-->
-<!--              </mu-list>-->
+              {{ cityWeatherInfo.city }} 各天氣站即時資訊 (每小時更新)
+              <mu-list>
+                <mu-list-item v-for="area of cityWeatherInfo.areas" :key="area['_id']">
+                  <mu-col>
+                    <mu-list-item-action>
+                      <h3 style="margin-right: 20px;">{{ area['_id'] }}</h3>
+                    </mu-list-item-action>
+                  </mu-col>
+                  <mu-col>
+                    <mu-list-item-content>
+                      <mu-list-item-title>溫度 {{ area.TEMP }}, 濕度 {{ area.HUMD }}</mu-list-item-title>
+                    </mu-list-item-content>
+                  </mu-col>
+                </mu-list-item>
+              </mu-list>
             </mu-card-text>
           </mu-card>
         </mu-flex>
@@ -39,7 +44,7 @@
 </template>
 
 <script>
-  import { popup } from '@/modules/message-text'
+  import { mapState } from 'vuex'
 
   export default {
     name: 'Weather',
@@ -50,25 +55,42 @@
       }
     },
 
+    computed: {
+      ...mapState('accountInfo', ['account']),
+    },
+
     async mounted () {
       const vueModel = this
-      let citiesWeatherInfoResponse, areasWeatherInfoResponse
-      citiesWeatherInfoResponse = await vueModel.$axios({
-        method: 'get',
-        url: `http://localhost:8080/api/weather/cities`
-      })
+      vueModel.$axios
+        .all([
+          vueModel.$axios.get('/api/weather/cities'),
+          vueModel.$axios.get('/api/weather/areas')
+        ])
+        .then(vueModel.$axios.spread(
+          (citiesWeatherInfoResponse, areasWeatherInfoResponse) => {
+            const citiesWeatherInfo = citiesWeatherInfoResponse.data
+            citiesWeatherInfo.forEach(
+              cityWeatherInfo => {
+                cityWeatherInfo.areas = areasWeatherInfoResponse.data
+                  .filter(areaWeatherInfo => areaWeatherInfo.city === cityWeatherInfo.city)
+              }
+            )
+            vueModel.citiesWeatherInfo = citiesWeatherInfo
+          })
+        )
 
-      vueModel.citiesWeatherInfo = citiesWeatherInfoResponse.data
-      areasWeatherInfoResponse = await vueModel.$axios({
-        method: 'get',
-        url: `http://localhost:8080/api/weather/areas`
-      })
-      vueModel.areasWeatherInfo = areasWeatherInfoResponse.data
+      // areasWeatherInfoResponse = await vueModel.$axios({
+      //   method: 'get',
+      //   url: `http://localhost:8080/api/weather/areas`
+      // })
+      // vueModel.areasWeatherInfo = areasWeatherInfoResponse.data
     },
 
     methods: {
       logout () {
-
+        if (window.localStorage) {
+          window.localStorage.removeItem('token')
+        }
       },
 
       determineCityImage (city) {

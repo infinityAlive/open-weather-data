@@ -10,10 +10,10 @@ weatherDataService.retrieveCityWeather = async cities => {
 
   const now = dayjs()
   const citiesWeatherInfo = []
-  for(let cityWeather of multiCityWeather) {
+  for (let cityWeather of multiCityWeather) {
     let singleCityWeatherInfo = {}
 
-    for(let weatherTimeRangeInfo of cityWeather.timeRange) {
+    for (let weatherTimeRangeInfo of cityWeather.timeRange) {
       const startTime = dayjs(weatherTimeRangeInfo.startTime)
       const endTime = dayjs(weatherTimeRangeInfo.endTime)
       const isNowBeforeTimeRange = now.isBefore(startTime)

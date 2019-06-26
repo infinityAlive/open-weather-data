@@ -31,7 +31,7 @@ loginService.retrieve = async (account, password) => {
     });
 
     if (loginInfo) {
-      const decryptedPwd = (0, _xorCrypt2.default)(loginInfo.password, _config2.default.key);
+      const decryptedPwd = (0, _xorCrypt2.default)(loginInfo.password, _config2.default.secret);
 
       if (decryptedPwd === password) {
         return _messages.LoginInfo.LOGIN_SUCCESS;

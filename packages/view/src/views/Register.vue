@@ -72,13 +72,12 @@
     methods: {
       async register () {
         const vueModel = this
-        let result
-        vueModel.isLoading = true
-        result = await vueModel.$refs.register.validate()
-        if (result === true) {
+        let validateResult = await vueModel.$refs.register.validate()
+        if (validateResult === true) {
+          vueModel.isLoading = true
           const response = await vueModel.$axios({
             method: 'post',
-            url: 'http://localhost:8080/api/register',
+            url: '/api/register',
             data: {
               account: vueModel.registerInfo.account,
               password: vueModel.registerInfo.password

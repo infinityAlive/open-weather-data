@@ -68,25 +68,37 @@ Vue.config.errorHandler = (error, vueModel) => {
   })
 }
 
-const checkToken = async () => {
+const retrieveAccount = async () => {
   let response
+  const token = window.localStorage ? window.localStorage.getItem('token') : ''
   try {
-    response = axios.post('http://localhost:8080/api/checkSession')
+    response = await axios.post('/api/checkToken',
+      {
+        token: token
+      })
+    return response.data
   } catch (error) {
     console.error(error)
+    return ''
   }
-  return (response && response.data)
+
 }
 
-// router.beforeEach(async (to, from, next) => {
-//   const isSkipCheckSession = to.matched.some(route => route.meta.isSkipCheckSession)
-//   const isSessionExisted = await checkSession()
-//   if (isSkipCheckSession || isSessionExisted) {
-//     next()
-//   } else {
-//     next('/auth')
-//   }
-// })
+router.beforeEach(async (to, from, next) => {
+  const isSkipCheckToken = to.matched.some(route => route.meta.isSkipCheckToken)
+  if (isSkipCheckToken) {
+    next()
+  } else {
+    const account = await retrieveAccount()
+    if (!account) {
+      next('/auth')
+    } else {
+      store.state.accountInfo.account = account
+      next()
+    }
+  }
+
+})
 
 new Vue({
   router,

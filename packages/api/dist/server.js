@@ -4,10 +4,6 @@ var _express = require("express");
 
 var _express2 = _interopRequireDefault(_express);
 
-var _expressSession = require("express-session");
-
-var _expressSession2 = _interopRequireDefault(_expressSession);
-
 var _cors = require("cors");
 
 var _cors2 = _interopRequireDefault(_cors);
@@ -30,16 +26,6 @@ const server = app.listen(port, () => {
   let port = server.address().port;
   console.log(`listening at host(${host}), port(${port})`);
 });
-const sessionConfig = {
-  path: 'localhost:8081/',
-  secret: 'open-weather-data',
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    maxAge: 60 * (60 * 1000)
-  } //app.use(session(sessionConfig))
-
-};
 app.use((0, _cors2.default)());
 app.options('*', (0, _cors2.default)());
 app.use(_bodyParser2.default.urlencoded({

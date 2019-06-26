@@ -13,7 +13,7 @@ export default new Router({
       name: 'Auth',
       component: () => import('@/views/Auth.vue'),
       meta: {
-        isSkipCheckSession: true
+        isSkipCheckToken: true
       }
     },
     {
@@ -21,7 +21,7 @@ export default new Router({
       name: 'Register',
       component: () => import('@/views/Register.vue'),
       meta: {
-        isSkipCheckSession: true
+        isSkipCheckToken: true
       }
     },
     {

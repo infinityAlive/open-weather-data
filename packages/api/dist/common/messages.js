@@ -19,8 +19,8 @@ const LoginInfo = {
   LOGIN_ACCOUNT_IS_EMPTY: 'Account is empty',
   LOGOUT_SUCCESS: 'Logout successfully',
   LOGOUT_FAILED: 'Logout failed',
-  SESSION_EXISTED: 'Session is existed',
-  SESSION_NOT_EXISTED: 'Session is not existed'
+  TOKEN_IS_RIGHT: 'Token is right',
+  TOKEN_IS_ERROR: 'Token is empty or wrong'
 };
 exports.HttpStatus = HttpStatus;
 exports.LoginInfo = LoginInfo;

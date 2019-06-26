@@ -4,7 +4,7 @@
       <img src="../static/img/sun.png">
     </mu-flex>
     <mu-flex justify-content="center">
-      <h1 class="margin-top main-title">雙北桃天氣即時資訊</h1>
+      <h1 class="margin-top main-title">北北桃天氣即時資訊</h1>
     </mu-flex>
     <mu-flex class="margin-top" justify-content="center">
       <mu-form class="login-block" ref="login" :model="loginInfo">
@@ -27,9 +27,12 @@
 </template>
 
 <script>
+  import store from '@/store/store'
+  import { mapActions } from 'vuex'
   import { popup } from '@/modules/message-text'
 
   export default {
+    store,
     name: 'Auth',
     data () {
       return {
@@ -72,42 +75,55 @@
     },
 
     methods: {
-      async submit () {
-        const vueModel = this
-        let result
-        vueModel.isLoading = true
-        result = await vueModel.$refs.login.validate()
-        if (result === true) {
-          const response = await vueModel.$axios({
-            method: 'post',
-            url: 'http://localhost:8080/api/login',
-            data: {
-              account: vueModel.loginInfo.account,
-              password: vueModel.loginInfo.password
-            }
-          })
-
-          vueModel.isLoading = false
-          vueModel.$modal.show({
-            text: `${popup.get(response.data)}`,
-            onOk: () => {
-              vueModel.$router.replace(
-                {
-                  name: 'Weather'
+      ...mapActions('accountInfo', ['assignAccountAction']),
+      ...{
+        async submit () {
+          const vueModel = this
+          let validateResult, response
+          vueModel.isLoading = true
+          validateResult = await vueModel.$refs.login.validate()
+          if (validateResult === true) {
+            try {
+              const account = vueModel.loginInfo.account
+              response = await vueModel.$axios({
+                method: 'post',
+                url: '/api/login',
+                data: {
+                  account: account,
+                  password: vueModel.loginInfo.password
                 }
-              )
+              })
+              vueModel.isLoading = false
+              const token = response.data.token
+              if (window.localStorage) {
+                window.localStorage.setItem('token', token)
+                vueModel.assignAccountAction(account)
+                vueModel.$router.replace(
+                  {
+                    name: 'Weather'
+                  })
+              } else {
+                vueModel.$modal.show({
+                  text: `${popup.get('Browser does not support WebStorage')}`,
+                })
+              }
+            } catch (error) {
+              console.error(error)
+              vueModel.$modal.show({
+                text: `${popup.get('Login failed')}`
+              })
             }
-          })
-        }
-      },
-
-      register () {
-        const vueModel = this
-        vueModel.$router.replace(
-          {
-            name: 'Register'
           }
-        )
+        },
+
+        register () {
+          const vueModel = this
+          vueModel.$router.replace(
+            {
+              name: 'Register'
+            }
+          )
+        }
       }
     }
   }

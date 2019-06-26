@@ -8,6 +8,6 @@ require("dotenv/config");
 
 const config = {
   mongoDbUri: process.env['MONGODB_URI'],
-  key: process.env['KEY']
+  secret: process.env['SECRET']
 };
 exports.default = config;
