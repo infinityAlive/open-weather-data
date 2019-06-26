@@ -19,6 +19,9 @@ weatherDataService.retrieveCityWeather = async cities => {
       const isNowBeforeTimeRange = now.isBefore(startTime)
       const isNowBetweenTimeRange = startTime.isBefore(now) && endTime.isAfter(now)
 
+      weatherTimeRangeInfo.startTime = dayjs(weatherTimeRangeInfo.startTime).format('YYYY/MM/DD HH:mm')
+      weatherTimeRangeInfo.endTime = dayjs(weatherTimeRangeInfo.endTime).format('YYYY/MM/DD HH:mm')
+
       if (isNowBeforeTimeRange) {
         singleCityWeatherInfo = weatherTimeRangeInfo
         break
@@ -32,6 +35,13 @@ weatherDataService.retrieveCityWeather = async cities => {
   }
 
   return citiesWeatherInfo
+}
+
+weatherDataService.retrieveAreaWeather = async cities => {
+  return await mongodbCrud.find('AreaWeather',
+    {
+      city: { $in: cities }
+    })
 }
 
 export default weatherDataService

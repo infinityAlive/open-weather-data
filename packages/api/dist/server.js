@@ -31,25 +31,19 @@ const server = app.listen(port, () => {
   console.log(`listening at host(${host}), port(${port})`);
 });
 const sessionConfig = {
+  path: 'localhost:8081/',
   secret: 'open-weather-data',
   resave: false,
   saveUninitialized: true,
   cookie: {
-    maxAge: 10 * 1000
-  }
+    maxAge: 60 * (60 * 1000)
+  } //app.use(session(sessionConfig))
+
 };
-
-if (app.get('env') === 'production') {
-  app.set('trust proxy', 1); // trust first proxy
-
-  sessionConfig.cookie.secure = true; // serve secure cookies
-}
-
-app.use((0, _expressSession2.default)(sessionConfig));
 app.use((0, _cors2.default)());
 app.options('*', (0, _cors2.default)());
 app.use(_bodyParser2.default.urlencoded({
   extended: false
 }));
 app.use(_bodyParser2.default.json());
-app.use('/api/infinity2015/weather', _router2.default);
+app.use('/api', _router2.default);

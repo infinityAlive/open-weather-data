@@ -14,22 +14,18 @@ const server = app.listen(port, () => {
   console.log(`listening at host(${host}), port(${port})`)
 })
 const sessionConfig = {
+  path: 'localhost:8081/',
   secret: 'open-weather-data',
   resave: false,
   saveUninitialized: true,
   cookie: {
-    maxAge: 10 * 1000
+    maxAge: 60 * (60 * 1000)
   }
 }
 
-if (app.get('env') === 'production') {
-  app.set('trust proxy', 1) // trust first proxy
-  sessionConfig.cookie.secure = true // serve secure cookies
-}
-
-app.use(session(sessionConfig))
+//app.use(session(sessionConfig))
 app.use(cors())
 app.options('*', cors())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-app.use('/api/infinity2015/weather', router)
+app.use('/api', router)

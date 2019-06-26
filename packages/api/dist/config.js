@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 require("dotenv/config");
 
 const config = {
-  mongoDbUri: process.env['MONGODB_URI']
+  mongoDbUri: process.env['MONGODB_URI'],
+  key: process.env['KEY']
 };
 exports.default = config;

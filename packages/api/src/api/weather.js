@@ -6,17 +6,18 @@ const retrieveCitiesWeatherInfo = (request, response) => {
   let corsFn = cors()
   corsFn(request, response, async () => {
     if (request.method === 'GET') {
-      let cties = []
+      let cities
       if (request.query.hasOwnProperty('city')) {
-        cties = request.query.cties
+        cities = request.query.cties
       } else {
-        cties = ['臺北市', '新北市', '桃園市']
+        cities = ['臺北市', '新北市', '桃園市']
       }
 
       try {
-        const citiesWeatherInfo = await weatherDataService.retrieveCityWeather(cties)
+        const citiesWeatherInfo = await weatherDataService.retrieveCityWeather(cities)
         response.status(HttpStatus.OK_200).send(citiesWeatherInfo)
       } catch (error) {
+        console.error(error)
         response.sendStatus(HttpStatus.SERVER_ERROR_500)
       }
     } else {
@@ -25,4 +26,28 @@ const retrieveCitiesWeatherInfo = (request, response) => {
   })
 }
 
-export { retrieveCitiesWeatherInfo }
+const retrieveAreasWeatherInfo = (request, response) => {
+  let corsFn = cors()
+  corsFn(request, response, async () => {
+    if (request.method === 'GET') {
+      let cities = []
+      if (request.query.hasOwnProperty('city')) {
+        cities = request.query.cties
+      } else {
+        cities = ['臺北市', '新北市', '桃園市']
+      }
+
+      try {
+        const areasWeatherInfo = await weatherDataService.retrieveAreaWeather(cities)
+        response.status(HttpStatus.OK_200).send(areasWeatherInfo)
+      } catch (error) {
+        console.error(error)
+        response.sendStatus(HttpStatus.SERVER_ERROR_500)
+      }
+    } else {
+      response.sendStatus(HttpStatus.BAD_REQUEST_400)
+    }
+  })
+}
+
+export { retrieveCitiesWeatherInfo, retrieveAreasWeatherInfo }
