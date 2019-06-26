@@ -39,7 +39,7 @@ const replaceOne = async (collectionName, query, document, options) => {
   try {
     const db = await retrieveCwbDb();
     const updateResult = await db.collection(collectionName).replaceOne(query, document, options);
-    console.log(`Result of upsert ${collectionName}, n = ${updateResult.result.n}`);
+    console.log(`Result of replace ${collectionName}, ok = ${updateResult.result.ok}`);
   } catch (error) {
     console.error(error);
   }
