@@ -20,6 +20,16 @@ const cleanFiles = source => {
     .pipe(clean())
 }
 
+const copy = dest => {
+  return () => {
+    return gulp.src(['./src/public/.well-known/**'], {
+      base: './src'
+    })
+      .pipe(gulp.dest(dest))
+  }
+}
+
+gulp.task('copyToDist', copy('./dist'))
 gulp.task('clean', cleanFiles.bind(cleanFiles, './dist'))
 
 /* babel */

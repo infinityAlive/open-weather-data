@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import router from './router'
+import path from 'path'
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
@@ -18,3 +19,4 @@ app.options('*', cors())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use('/api', router)
+app.use(express.static(path.join(__dirname, 'public')))

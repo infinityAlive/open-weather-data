@@ -21,11 +21,11 @@ const switchEnv = env => {
       base: './'
     })
     .pipe(
-      replace(/(localhost:8080|104.199.245.246)/g, () => {
+      replace(/(http:\/\/localhost:8080|https:\/\/open-weather-data-api.herokuapp.com)/g, () => {
         if (env === 'dev') {
-          return 'localhost:8080'
+          return 'http://localhost:8080'
         } else {
-          return '104.199.245.246'
+          return 'https://open-weather-data-api.herokuapp.com'
         }
       })
     )

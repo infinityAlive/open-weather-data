@@ -16,6 +16,10 @@ var _router = require("./router");
 
 var _router2 = _interopRequireDefault(_router);
 
+var _path = require("path");
+
+var _path2 = _interopRequireDefault(_path);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
@@ -33,3 +37,4 @@ app.use(_bodyParser2.default.urlencoded({
 }));
 app.use(_bodyParser2.default.json());
 app.use('/api', _router2.default);
+app.use(_express2.default.static(_path2.default.join(__dirname, 'public')));

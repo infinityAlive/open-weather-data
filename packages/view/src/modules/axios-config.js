@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://104.199.245.246'
+axios.defaults.baseURL = 'https://open-weather-data-api.herokuapp.com'
 axios.interceptors.response.use(response => response, Promise.reject)
 
 export default {
