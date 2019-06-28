@@ -29,7 +29,7 @@
 <script>
   import store from '@/store/store'
   import { mapActions } from 'vuex'
-  import { popup } from '@/modules/message-text'
+  import { Popup } from '@/modules/message-text'
 
   export default {
     store,
@@ -93,6 +93,7 @@
                   password: vueModel.loginInfo.password
                 }
               })
+
               vueModel.isLoading = false
               const token = response.data.token
               if (window.localStorage) {
@@ -104,25 +105,19 @@
                   })
               } else {
                 vueModel.$modal.show({
-                  text: `${popup.get('Browser does not support WebStorage')}`,
+                  text: `${Popup.get('Browser does not support WebStorage')}`,
                 })
               }
             } catch (error) {
-              console.error(error)
-              vueModel.$modal.show({
-                text: `${popup.get('Login failed')}`
-              })
+              vueModel.isLoading = false
+              throw error
             }
           }
         },
 
         register () {
           const vueModel = this
-          vueModel.$router.replace(
-            {
-              name: 'Register'
-            }
-          )
+          vueModel.$router.replace({ name: 'Register' })
         }
       }
     }

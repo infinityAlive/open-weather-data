@@ -9,7 +9,7 @@ import 'dayjs/locale/zh-tw'
 import axios from 'axios'
 import axiosConfig from '@/modules/axios-config'
 import util from '@/modules/util'
-import { ErrorText } from '@/modules/message-text'
+import { ErrorText, Popup } from '@/modules/message-text'
 
 import 'muse-ui/dist/muse-ui.css'
 import 'iview/dist/styles/iview.css'
@@ -62,10 +62,16 @@ Vue.prototype.$modal = {
 }
 
 Vue.config.errorHandler = (error, vueModel) => {
-  console.error(error)
-  vueModel.$modal.show({
-    text: ErrorText.EXCEPTION
-  })
+  if (error.response && error.response.data) {
+    vueModel.$modal.show({
+      text: `${Popup.get(error.response.data)}`
+    })
+  } else {
+    console.error(error)
+    vueModel.$modal.show({
+      text: ErrorText.EXCEPTION
+    })
+  }
 }
 
 const retrieveAccount = async () => {
@@ -81,7 +87,6 @@ const retrieveAccount = async () => {
     console.error(error)
     return ''
   }
-
 }
 
 router.beforeEach(async (to, from, next) => {
