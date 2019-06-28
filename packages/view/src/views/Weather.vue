@@ -2,7 +2,7 @@
   <section>
     <mu-appbar style="width: 100%;" color="primary">
       {{ account}} 您好，目前北北桃天氣資訊如下：
-      <mu-button flat slot="right">登出</mu-button>
+      <mu-button flat slot="right" @click="logout">登出</mu-button>
     </mu-appbar>
     <article>
       <mu-container>
@@ -78,18 +78,18 @@
             vueModel.citiesWeatherInfo = citiesWeatherInfo
           })
         )
-
-      // areasWeatherInfoResponse = await vueModel.$axios({
-      //   method: 'get',
-      //   url: `http://localhost:8080/api/weather/areas`
-      // })
-      // vueModel.areasWeatherInfo = areasWeatherInfoResponse.data
     },
 
     methods: {
       logout () {
+        const vueModel = this
         if (window.localStorage) {
           window.localStorage.removeItem('token')
+          vueModel.$router.replace(
+            {
+              name: 'Auth'
+            }
+          )
         }
       },
 

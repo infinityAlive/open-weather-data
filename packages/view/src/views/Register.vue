@@ -25,7 +25,7 @@
 </template>
 
 <script>
-  import { popup } from '@/modules/message-text'
+  import { Popup } from '@/modules/message-text'
 
   export default {
     name: 'Register',
@@ -75,28 +75,37 @@
         let validateResult = await vueModel.$refs.register.validate()
         if (validateResult === true) {
           vueModel.isLoading = true
-          const response = await vueModel.$axios({
-            method: 'post',
-            url: '/api/register',
-            data: {
-              account: vueModel.registerInfo.account,
-              password: vueModel.registerInfo.password
-            }
-          })
+          let response, popupInfo
+          try {
+            response = await vueModel.$axios({
+              method: 'post',
+              url: '/api/register',
+              data: {
+                account: vueModel.registerInfo.account,
+                password: vueModel.registerInfo.password
+              }
+            })
+            vueModel.isLoading = false
+          } catch (error) {
+            vueModel.isLoading = false
+            throw error
+          }
 
-          vueModel.isLoading = false
-          vueModel.$modal.show({
-            text: `${popup.get(response.data)}，返回登入頁`,
-            onOk: () => {
-              vueModel.$router.replace(
-                {
-                  name: 'Auth'
-                }
-              )
+          if (response.data.indexOf('failed') >= 0) {
+            popupInfo = {
+              text: `${Popup.get(response.data)}`
             }
-          })
+          } else {
+            popupInfo = {
+              text: `${Popup.get(response.data)}，返回登入頁`,
+              onOk: () => {
+                vueModel.$router.replace({ name: 'Auth' })
+              }
+            }
+          }
+          vueModel.$modal.show(popupInfo)
         }
-      },
+      }
     }
   }
 </script>
