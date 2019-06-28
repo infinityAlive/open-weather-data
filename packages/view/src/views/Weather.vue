@@ -15,7 +15,7 @@
                            :sub-title="cityWeatherInfo.desc">
               <img :src="determineCityImage (cityWeatherInfo.city)">
             </mu-card-media>
-            <mu-card-title :title="`溫度 ${cityWeatherInfo.minTemperature} ~ ${cityWeatherInfo.maxTemperature}`"
+            <mu-card-title :title="`溫度 ${cityWeatherInfo.minTemperature} ~ ${cityWeatherInfo.maxTemperature}度 C`"
                            :sub-title="`降雨機率 ${cityWeatherInfo.rainProbability}`"></mu-card-title>
             <mu-card-text>
               {{ cityWeatherInfo.city }} 各天氣站即時資訊 (每小時更新)
@@ -23,12 +23,12 @@
                 <mu-list-item v-for="area of cityWeatherInfo.areas" :key="area['_id']">
                   <mu-col>
                     <mu-list-item-action>
-                      <h3 style="margin-right: 20px;">{{ area['_id'] }}</h3>
+                      <div class="area-subtitle">{{ area['_id'] }}</div>
                     </mu-list-item-action>
                   </mu-col>
                   <mu-col>
                     <mu-list-item-content>
-                      <mu-list-item-title>溫度 {{ area.TEMP }}, 濕度 {{ area.HUMD }}</mu-list-item-title>
+                      <mu-list-item-title>{{ area.TEMP }} 度Ｃ - 濕度 {{ parseInt(area.HUMD * 100) }}%</mu-list-item-title>
                     </mu-list-item-content>
                   </mu-col>
                 </mu-list-item>
@@ -120,5 +120,13 @@
 
   .login-block {
     width: 500px
+  }
+
+  .area-subtitle {
+    font-size: 15px;
+    font-weight: 800;
+    color: #17233d;
+    margin-right: 10px;
+    margin-left: -20px;
   }
 </style>
