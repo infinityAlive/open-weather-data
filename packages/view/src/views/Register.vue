@@ -13,6 +13,10 @@
           <mu-text-field type="password" v-model="registerInfo.password"
                          prop="password"></mu-text-field>
         </mu-form-item>
+        <mu-form-item label="再次確認密碼" prop="confirmPassword" :rules="confirmPasswordRules">
+          <mu-text-field type="password" v-model="registerInfo.confirmPassword"
+                         prop="confirmPassword"></mu-text-field>
+        </mu-form-item>
         <mu-form-item>
           <mu-button color="primary" @click="register">確認註冊</mu-button>
         </mu-form-item>
@@ -30,11 +34,13 @@
   export default {
     name: 'Register',
     data () {
+      const vueModel = this
       return {
         isLoading: false,
         registerInfo: {
           account: '',
-          password: ''
+          password: '',
+          confirmPassword: ''
         },
 
         accountRules: [
@@ -64,6 +70,16 @@
               return password.length >= 3 && password.length <= 10
             },
             message: '密碼長度介於 3 ~ 10 字元'
+          }
+        ],
+
+        confirmPasswordRules: [
+          {
+            validate (confirmPassword) {
+              console.log(confirmPassword)
+              return (confirmPassword === vueModel.registerInfo.password)
+            },
+            message: '確認密碼與輸入之密碼不符'
           }
         ],
       }
